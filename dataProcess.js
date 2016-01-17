@@ -41,23 +41,24 @@ findRange = function(number, rangeObject){
 	}
 };
 
-createLegend = function(canvas, legendText, outline){
-	leftMarginMultiplier = 3;
+createLegend = function(canvas, legendValue, outline){
 	legend = canvas.append("g").attr("class", "mainLegend")
-		.attr("transform", "translate(" + (outline.leftMargin)*leftMarginMultiplier + "," + (outline.topMargin + 10 )+ ")");	
+		.attr("transform", "translate(" + (outline.width + outline.leftMargin - 10) + "," + (outline.topMargin + 10 )+ ")");	
 
 	//append data
-	legendText = legend.selectAll("text").data(legendText);
+	legendText = legend.selectAll("text").data(legendValue);
 
 	//enter data
 	legendText.enter().append("text")
 		.attr("class", "legendText");
 
+	
 	//update data
 	legendText
 		.text(function(d){ return d; })
-			.attr("x", function(d, i) { return i*100; })
-			.attr("class", function(d, i) { return (i == 0) ? "legendText current_data": "legendText"})
+		.attr("text-anchor", "end")
+		.attr("x", function(d, i) { return -(legendValue.length - i -1)*90; })
+		.attr("class", function(d, i) { return (i == 0) ? "legendText current_data": "legendText"})
 }
 
 	
