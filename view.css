@@ -1,0 +1,59 @@
+body{
+	fill: white;
+	/*
+	background: #eee;
+	background: #272638;
+	 * */
+	background: #0B1B2D;
+	width:  1200px;
+	height: 1100px;
+	font:   12px;
+	font-family: 'Lato', sans-serif;
+}
+/*
+div {
+	box-shadow: 2px 2px 5px #888888;
+}
+*/
+.axis text {
+	font-size: 13px;
+}
+
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: white;
+	shape-rendering: crispEdges;
+}
+
+#F500{
+/*	background: #FFFFFF; 
+	background: #232229;
+	background: #0F2E52;
+ */
+	background: #0F2E52;
+	position: absolute;
+	top:  20px;
+	left: 100px;
+}	
+
+
+
+
+.mainLegend text{
+	font-size: 18px;
+	font-weight: bold;
+}
+
+
+.legendText.current_data, .legendText:hover {
+	fill: #50E3C2;
+	text-decoration: underline;
+}
+
+
+.scatterplotCircles{
+	fill: #50E3C2;
+}
+

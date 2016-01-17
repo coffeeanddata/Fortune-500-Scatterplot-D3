@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+		<script src="maind3.js" charset="utf-8"></script>
+		<script src="dataProcess.js" charset="utf-8"></script>
+		<link href="view.css" rel = "stylesheet"/>
+	</head>
+	<body>
+	<script>
+//http://wiki.stat.ucla.edu/socr/index.php/SOCR_Data
+		visualChart = function(d){
+			chartOutline = outlineParameters(1000, 420, 35, 70, 130, 60);		
+			canvas = getCanvas("F500", chartOutline);
+			nestedGroups = dataGroup2(d, "Year", "RankG");
+			
+			var graph = canvas.append("g")
+				.attr("class", "mainGraph")
+				.attr("transform", "translate(" + chartOutline.leftMargin + "," +  chartOutline.topMargin + ")");		
+			scatterPlot(graph, nestedGroups[0].values[0].values, chartOutline, "Rank", "Revenue");
+
+			createLegend(canvas, rangeTitle, chartOutline);
+			interactiveLegend(canvas);
+
+
+			console.log(nestedGroups)
+		};
+		d3.csv("newData.csv", renderData,  visualChart);
+	</script>
+	</body>
+</html>
