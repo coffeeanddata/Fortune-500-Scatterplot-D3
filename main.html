@@ -10,35 +10,37 @@
 	</head>
 	<body>
 	<script>
-//http://wiki.stat.ucla.edu/socr/index.php/SOCR_Data
+		//http://wiki.stat.ucla.edu/socr/index.php/SOCR_Data
 		visualChart = function(d){
+			// create an object with outline properties used for plotting
 			chartOutline = outlineParameters(1000, 420, 35, 70, 130, 60);		
+			//create canvas (aka plot with plot id)
 			canvas = getCanvas("F500", chartOutline);
+			
+			//group data by key (year) and nested key(rank)
 			nestedGroups = dataGroup2(d, "Year", "RankG");
+			//create a array of the year key (already sorted in nestedGroups by desceding order starting [0] @ 2008
 			getYears = nestedGroups.map(function(data){ return data.key; });
 			
-			var graph = canvas.append("g")
-				.attr("class", "mainGraph")
-				.attr("transform", "translate(" + chartOutline.leftMargin + "," +  chartOutline.topMargin + ")");		
-			scatterPlot(graph, nestedGroups[0].values[0].values, chartOutline, "Rank", "Revenue");
+			//create scatter plot (canvas, data[0].values[0].values = Data from 2008 for F500 Rank group 1-50, "X value", "Y value")
+			scatterPlot(canvas, nestedGroups[0].values[0].values, "Rank", "Revenue");
 
-			createLegend(canvas, rangeTitle, chartOutline);
+			//basic horizontal text legend on top of plot
+			createLegend(canvas, rangeTitle);
+			
+			//make legend switch between rank groups
 			interactiveLegend(canvas);
+			//lazy drop down
 			dropDown("body", getYears , canvas, nestedGroups, chartOutline, "Rank", "Revenue");
 
+			// Second plot, reusing same outline because they are identical in size
 			canvas2 = getCanvas("Yearly_Mean", chartOutline);
+			
+			//first group by year then find the mean
 			meanYear = dataGroup3(d, "Year");
-
-			var graph2 = canvas2.append("g")
-				.attr("class", "mainGraph")
-				.attr("transform", "translate(" + chartOutline.leftMargin + "," +  chartOutline.topMargin + ")");		
-
-			scatterPlot(graph2, meanYear, chartOutline, "key", "values");
+			scatterPlot(canvas2, meanYear, "key", "values");
 			console.log(nestedGroups);
 			console.log(meanYear);
-
-
-
 
 		};
 		d3.csv("newData.csv", renderData,  visualChart);

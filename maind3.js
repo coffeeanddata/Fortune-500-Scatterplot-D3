@@ -1,3 +1,6 @@
+//javascript functions that creates quick and easy cavnas for plotting scatterplots and histograms
+//
+//creating outline object
 outlineParameters = function(width, height, top, bottom, left, right){
 	var barMargin   = {top:top, right:right, bottom:bottom, left: left},
 		chartWidth  = width  - barMargin.left - barMargin.right,
@@ -9,18 +12,29 @@ outlineParameters = function(width, height, top, bottom, left, right){
 		leftMargin: barMargin.left, rightMargin: barMargin.right
 	});
 }
-getCanvas = function(barClass, outline){
-	var div = d3.select("body").append("div").attr("id", barClass);
+
+//creating canvas using svg elements (uniqueId, outline from outlineParametes)
+getCanvas = function(barId, outline){
+	var div = d3.select("body").append("div").attr("id", barId);
 	var canvas = div.append("svg")
 		.attr("width",  outline.width  + outline.leftMargin + outline.rightMargin)
 		.attr("height", outline.height + outline.topMargin + outline.bottomMargin)
-	return(canvas)
+	graph = canvas.append("g")
+		.attr("class", "mainGraph")
+		.attr("transform", "translate(" + chartOutline.leftMargin + "," +  chartOutline.topMargin + ")");		
+	return {
+		plot: canvas,
+		outline: outline
+	};
 }
 
 
+//scatterplot using bind, append, enter, update, and exit
+// only handles numeric vs numeric not really made to be used with categorical vs numeric plotting
+scatterPlot = function(canvas, data, xValue, yValue){
+	graph = canvas.plot.select("g.mainGraph");
+	outline = canvas.outline;
 
-
-scatterPlot = function(graph, data, outline, xValue, yValue){
 	graph.selectAll(".axis").remove();
 	var xScale = d3.scale.linear().range([0, outline.width]);
 	var yScale = d3.scale.linear().range([outline.height, 0]);
@@ -66,7 +80,7 @@ scatterPlot = function(graph, data, outline, xValue, yValue){
 			.remove();
 }
 
-
+//really easy nesting function with d3.nesting as descending. 
 groupByKey = function(data, mainKey){
 	var nestedData = d3.nest()
 		.key(function(d){ return dateRevert(d[mainKey]); })
