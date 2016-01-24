@@ -61,28 +61,60 @@ createLegend = function(canvas, legendValue, outline){
 		.attr("class", function(d, i) { return (i == 0) ? "legendText current_data": "legendText"})
 }
 
-	
-
 
 interactiveLegend = function(canvas){
 	getLegend = canvas.select("g.mainLegend");
 	getText = getLegend.selectAll("text");
 
 	getText.on("click", function(d, i){ 
+		// update class for each text
 		getText.attr("class", "legendText");
 		d3.select(this).attr("class", "legendText current_data");
 
-		scatterPlot(canvas.select("g.mainGraph"), nestedGroups[0].values[i].values, chartOutline, "Rank", "Revenue")			
-		profitSize(canvas.select("g.mainGraph"), nestedGroups[0].values[i].values, chartOutline, "Rank", "Revenue");
+		//get current dropdown value
+		getSelect = document.getElementsByClassName("simpleDropdown")[0];
+		getIndex = getSelect.selectedIndex;
+
+		console.log(getSelect.options[getIndex].text)
+
+
+		
+		scatterPlot(canvas.select("g.mainGraph"), nestedGroups[getIndex].values[i].values, chartOutline, "Rank", "Revenue")			
 	});
 }
 
+dropDown = function(appendTo, values, canvas, data, outline, xValue, yValue){
+	d3.select(appendTo).append("select").attr("class", "simpleDropdown");
+	getDropdown = d3.select("select.simpleDropdown");
+	getOptions = getDropdown.selectAll("option").data(values)
+	getOptions.enter().append("option").text(function(d){ return d;});
+
+	getDropdown.on("change", function(selected){
+		getLegendText = canvas.select("g.mainLegend text.legendText.current_data").text();
+		getLegendTextIndex = rangeTitle.indexOf(getLegendText);
+		console.log(this.selectedIndex);
+		scatterPlot(canvas.select("g.mainGraph"),  data[this.selectedIndex].values[getLegendTextIndex].values, outline, xValue, yValue);
+		
+	})
+}
 //Not currently being used
 profitSize = function(container, data, sizeName){
 	pixelMaxSize = 15
 	sizeScale = d3.scale.linear()
 		.range([0, pixelMaxSize])
 		.domain(d3.extent(data, function(x){ return x[sizeName]; }));
-	console.log(sizeScale.domain())
 	return(sizeScale);	
 }
+
+
+
+
+dataGroup3 = function(data, mainKey){
+	var nestedData = d3.nest()
+		.key(function(d){ return dateRevert(d[mainKey]); })
+			.sortKeys(d3.descending)
+		.rollup(function(d) { return d3.mean(d, function(dx) { return dx.Profit; }); })
+		.entries(data);
+	return nestedData;
+};
+
