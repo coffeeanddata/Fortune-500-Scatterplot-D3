@@ -13,7 +13,8 @@
 		//http://wiki.stat.ucla.edu/socr/index.php/SOCR_Data
 		visualChart = function(d){
 			// create an object with outline properties used for plotting
-			chartOutline = outlineParameters(1000, 420, 35, 70, 130, 60);		
+			// outlineParameters = function(width, height, top, bottom, left, right){
+			chartOutline = outlineParameters(1000, 550, 100, 100, 130, 60);		
 			//create canvas (aka plot with plot id)
 			canvas = getCanvas("F500", chartOutline);
 			
@@ -24,23 +25,25 @@
 			
 			//create scatter plot (canvas, data[0].values[0].values = Data from 2008 for F500 Rank group 1-50, "X value", "Y value")
 			scatterPlot(canvas, nestedGroups[0].values[0].values, "Rank", "Revenue");
-
+			putTitle(canvas, "Revenue vs Rank");
+		
 			//basic horizontal text legend on top of plot
 			createLegend(canvas, rangeTitle);
-			
 			//make legend switch between rank groups
 			interactiveLegend(canvas);
 			//lazy drop down
 			dropDown("body", getYears , canvas, nestedGroups, chartOutline, "Rank", "Revenue");
 
+
 			// Second plot, reusing same outline because they are identical in size
 			canvas2 = getCanvas("Yearly_Mean", chartOutline);
-			
+			putTitle(canvas2, "Average Revenue over time");
 			//first group by year then find the mean
 			meanYear = dataGroup3(d, "Year");
 			scatterPlot(canvas2, meanYear, "key", "values");
-			console.log(nestedGroups);
-			console.log(meanYear);
+			updateAxisLabels(canvas2, "Year", "Average Revenue F500");
+			//console.log(nestedGroups);
+			//console.log(meanYear);
 
 		};
 		d3.csv("newData.csv", renderData,  visualChart);

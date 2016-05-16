@@ -9,7 +9,6 @@ renderData = function(data){
 			Revenue : +data["Revenue_in_millions"],
 			Profit  : +data["Profit_in_millions"]
 	};
-
 };
 
 //Rank Groups
@@ -30,7 +29,6 @@ findRange = function(number, rangeObject){
 	for(i = 0; i < rangeObject.length; i++){
 		if( (number >= rangeObject[i].min) && (number <= rangeObject[i].max)){
 			return i;
-//			return i + 1;
 		} 
 	}
 };
@@ -68,7 +66,6 @@ createLegend = function(canvas, legendValue){
 	//enter data
 	legendText.enter().append("text")
 		.attr("class", "legendText");
-
 	
 	//update data
 	legendText
@@ -131,3 +128,21 @@ dataGroup3 = function(data, mainKey){
 	return nestedData;
 };
 
+
+
+putTitle = function(mainCanvas, plotText){
+	getPlot = mainCanvas.plot;
+	getMargins = mainCanvas.outline;
+	getPlot.append("text")
+		.attr("text-anchor", "middle")
+		.attr("transform", "translate(" + (getMargins.leftMargin + getMargins.width/2) + "," + (getMargins.topMargin/2)+ ")")	
+		.text(plotText);
+}
+
+
+updateAxisLabels = function(canvas, xAxisLabel, yAxisLabel){
+	getGraph = canvas.plot.select("g.mainGraph");
+	getGraph.select("text.y_axis_label").text(yAxisLabel);
+	getGraph.select("text.x_axis_label").text(xAxisLabel);
+	
+}

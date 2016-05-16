@@ -45,13 +45,23 @@ scatterPlot = function(canvas, data, xValue, yValue){
 
 
 	// Create Axis group
-	var xAxisGroup = graph.append("g").attr("transform", "translate(0, " + outline.height + ")").attr("class", "y axis");
-	var yAxisGroup = graph.append("g").attr("class", "y axis");
+	var xAxisGroup = graph.append("g").attr("transform", "translate(0, " + outline.height + ")").attr("class", "x_axis axis");
+	var yAxisGroup = graph.append("g").attr("class", "y_axis axis");
 
 	// Create Axis
 	var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
 	var yAxis = d3.svg.axis().scale(yScale).orient("left");
-
+	
+	graph.append("text")
+		.attr("class", "x_axis_label axis_label")
+		.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+		.attr("transform", "translate("+ (canvas.outline.width/2) +","+(canvas.outline.height + outline.bottomMargin/2)+")")  // text is drawn off the screen top left, move down and out and rotate
+		.text(xValue);
+	graph.append("text")
+		.attr("class","y_axis_label axis_label")
+		.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+		.attr("transform", "translate("+ (-canvas.outline.leftMargin/2) +","+(canvas.outline.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+		.text(yValue);
 	
 	// Call Axis
 	xAxisGroup.transition().duration(1000).call(xAxis);
